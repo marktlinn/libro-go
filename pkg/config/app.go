@@ -1,4 +1,4 @@
-package app
+package config
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
+type DB struct {
 	db *gorm.DB
-)
+}
 
-func Connect() {
+func Connect() *DB {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
@@ -23,9 +23,10 @@ func Connect() {
 	if err != nil {
 		panic(err)
 	}
-	db = conn
+	return &DB{db: conn}
 }
 
-func GetDB() *gorm.DB {
-	return db
+// Returns the database instance
+func (d *DB) GetDB() *gorm.DB {
+	return d.db
 }
