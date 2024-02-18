@@ -12,8 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var NewBook models.Book
-
 const (
 	FailedToEncodeRes = "failed to encode response"
 	FailedToParseId   = "failed to parse book id"
