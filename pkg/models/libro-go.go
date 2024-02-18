@@ -55,9 +55,14 @@ func GetBookByID(ID int64, db *gorm.DB) (*Book, error) {
 // Deletes the specified book from the database.
 func DeleteBook(ID int64, db *gorm.DB) (Book, error) {
 	var book Book
-	if err := db.Where("ID=?", ID).Delete(book).Error; err != nil {
+	if err := db.First(&book, ID).Error; err != nil {
 		return Book{}, err
 	}
+
+	if err := db.Where("ID=?", ID).Delete(&book).Error; err != nil {
+		return Book{}, err
+	}
+
 	return book, nil
 }
 
