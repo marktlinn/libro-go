@@ -27,9 +27,11 @@ func init() {
 }
 
 // Creates given Book in the database
-func (b *Book) CreateBook(db *gorm.DB) *Book {
-	db.Create(&b)
-	return b
+func (b *Book) CreateBook(db *gorm.DB) (*Book, error) {
+	if err := db.Create(&b).Error; err != nil {
+		return nil, err
+	}
+	return b, nil
 }
 
 // Gets all Books from the database
@@ -42,15 +44,33 @@ func GetAllBooks(db *gorm.DB) ([]Book, error) {
 }
 
 // Gets the specified Book according to its ID from the database.
-func GetBookByID(ID int64, db *gorm.DB) *Book {
+func GetBookByID(ID int64, db *gorm.DB) (*Book, error) {
 	var book Book
-	db.Where("ID=?", ID).Find(&book)
-	return &book
+	if err := db.Where("ID=?", ID).Find(&book).Error; err != nil {
+		return nil, err
+	}
+	return &book, nil
 }
 
 // Deletes the specified book from the database.
-func DeleteBook(ID int64, db *gorm.DB) Book {
+func DeleteBook(ID int64, db *gorm.DB) (Book, error) {
 	var book Book
-	db.Where("ID=?", ID).Delete(book)
-	return book
+	if err := db.Where("ID=?", ID).Delete(book).Error; err != nil {
+		return Book{}, err
+	}
+	return book, nil
+}
+
+// Updates this book's fields with the newData passed.
+func (b *Book) UpdateBookData(newData *Book) *Book {
+	if newData.Author != "" {
+		b.Author = newData.Author
+	}
+	if newData.Name != "" {
+		b.Name = newData.Name
+	}
+	if newData.Publication != "" {
+		b.Publication = newData.Publication
+	}
+	return b
 }
