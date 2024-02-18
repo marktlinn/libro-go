@@ -9,7 +9,7 @@ import (
 func ParseBody(r *http.Request, x interface{}) error {
 	decoder := json.NewDecoder(r.Body)
 	defer r.Body.Close()
-
+	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(x); err != nil {
 		return err
 	}
