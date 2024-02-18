@@ -15,12 +15,12 @@ var RegisterLibroGoRoutes = func(router *mux.Router) {
 	}
 	db := dbConnection.GetDB()
 
-	router.HandleFunc("/book/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/book", func(w http.ResponseWriter, r *http.Request) {
 		controllers.CreateBook(w, r, db)
 	},
 	).Methods("POST")
 
-	router.HandleFunc("/books/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
 		controllers.GetBooks(w, r, db)
 	},
 	).Methods("GET")

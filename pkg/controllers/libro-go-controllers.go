@@ -31,12 +31,11 @@ func CreateBook(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 		return
 	}
 
+	setHeaderOK(w)
 	if err := json.NewEncoder(w).Encode(b); err != nil {
 		http.Error(w, fmt.Sprintf("%s: %s", FailedToEncodeRes, err), http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func GetBooks(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
@@ -46,12 +45,11 @@ func GetBooks(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 		return
 	}
 
+	setHeaderOK(w)
 	if err = json.NewEncoder(w).Encode(newBooks); err != nil {
 		http.Error(w, fmt.Sprintf("%s: %s", FailedToEncodeRes, err), http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func GetBookById(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
@@ -69,12 +67,12 @@ func GetBookById(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 		return
 	}
 
+	setHeaderOK(w)
 	if err = json.NewEncoder(w).Encode(book); err != nil {
 		http.Error(w, fmt.Sprintf("%s: %s", FailedToEncodeRes, err), http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 }
 
 func UpdateBook(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
@@ -101,11 +99,11 @@ func UpdateBook(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 	b.UpdateBookData(updatedBook)
 	db.Save(&b)
 
+	setHeaderOK(w)
 	if err = json.NewEncoder(w).Encode(b); err != nil {
 		http.Error(w, fmt.Sprintf("%s: %s", FailedToEncodeRes, err), http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func DeleteBook(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
@@ -123,9 +121,15 @@ func DeleteBook(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 		return
 	}
 
+	setHeaderOK(w)
 	if err = json.NewEncoder(w).Encode(b); err != nil {
 		http.Error(w, fmt.Sprintf("%s: %s", FailedToEncodeRes, err), http.StatusInternalServerError)
 		return
 	}
+}
+
+// Sets the http.ResponseWriter to "Content-Type" = "application/json", with an http Status Code of 200
+func setHeaderOK(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }
