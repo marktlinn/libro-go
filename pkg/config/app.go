@@ -12,7 +12,8 @@ type DB struct {
 	db *gorm.DB
 }
 
-func Connect() *DB {
+// Creates a connection to the database and returns the DB instance.
+func Connect() (*DB, error) {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
@@ -21,9 +22,9 @@ func Connect() *DB {
 
 	conn, err := gorm.Open(mysql.Open(dbString), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return &DB{db: conn}
+	return &DB{db: conn}, nil
 }
 
 // Returns the database instance

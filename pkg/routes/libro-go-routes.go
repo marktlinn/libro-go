@@ -8,7 +8,7 @@ import (
 var RegisterLibroGoRoutes = func(router *mux.Router) {
 	router.HandleFunc("/book/", controllers.CreateBook).Methods("POST")
 
-	router.HandleFunc("/books/", controllers.GetBook).Methods("GET")
+	router.HandleFunc("/books/", controllers.GetBooks).Methods("GET")
 
 	router.HandleFunc("/books/{id}", controllers.GetBookById).Methods("GET")
 
